@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// A customizable single-select dropdown widget with optional search functionality.
-///
+
 /// This widget provides a Flutter-style dropdown that can display items in an overlay,
 /// with optional search filtering and full customization support.
 class AllDropdown<T> extends StatefulWidget {
