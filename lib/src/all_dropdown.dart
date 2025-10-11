@@ -152,7 +152,11 @@ class _AllDropdownState<T> extends State<AllDropdown<T>> {
         _filteredItems = widget.items;
       } else {
         _filteredItems = widget.items
-            .where((item) => _itemToString(item).toLowerCase().contains(query.toLowerCase()))
+            .where(
+              (item) => _itemToString(
+                item,
+              ).toLowerCase().contains(query.toLowerCase()),
+            )
             .toList();
       }
     });
@@ -181,23 +185,24 @@ class _AllDropdownState<T> extends State<AllDropdown<T>> {
           offset: Offset(0, size.height + 5),
           child: Material(
             elevation: 8,
-            borderRadius: widget.dropdownBorderRadius ?? BorderRadius.circular(8),
+            borderRadius:
+                widget.dropdownBorderRadius ?? BorderRadius.circular(8),
             child: Container(
-              decoration: widget.dropdownDecoration ??
+              decoration:
+                  widget.dropdownDecoration ??
                   BoxDecoration(
                     color: Theme.of(context).cardColor,
-                    borderRadius: widget.dropdownBorderRadius ?? BorderRadius.circular(8),
+                    borderRadius:
+                        widget.dropdownBorderRadius ?? BorderRadius.circular(8),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 10,
                         offset: const Offset(0, 5),
                       ),
                     ],
                   ),
-              constraints: BoxConstraints(
-                maxHeight: widget.maxHeight ?? 300,
-              ),
+              constraints: BoxConstraints(maxHeight: widget.maxHeight ?? 300),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -247,10 +252,11 @@ class _AllDropdownState<T> extends State<AllDropdown<T>> {
                   },
                 )
               : null,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 8,
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           isDense: true,
         ),
         onChanged: _filterItems,
@@ -266,7 +272,9 @@ class _AllDropdownState<T> extends State<AllDropdown<T>> {
             child: Text(
               'No items found',
               style: TextStyle(
-                color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
+                color: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
               ),
             ),
           ),
@@ -288,16 +296,24 @@ class _AllDropdownState<T> extends State<AllDropdown<T>> {
             _removeOverlay();
           },
           child: Container(
-            padding: widget.itemPadding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding:
+                widget.itemPadding ??
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             color: isSelected
-                ? (widget.selectedItemColor ?? Theme.of(context).primaryColor.withOpacity(0.1))
+                ? (widget.selectedItemColor ??
+                      Theme.of(context).primaryColor.withValues(alpha: 0.1))
                 : null,
-            child: widget.itemBuilder?.call(context, item) ??
+            child:
+                widget.itemBuilder?.call(context, item) ??
                 Text(
                   _itemToString(item),
                   style: (widget.itemStyle ?? const TextStyle()).copyWith(
-                    color: widget.itemTextColor ?? Theme.of(context).textTheme.bodyLarge?.color,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                    color:
+                        widget.itemTextColor ??
+                        Theme.of(context).textTheme.bodyLarge?.color,
+                    fontWeight: isSelected
+                        ? FontWeight.w600
+                        : FontWeight.normal,
                   ),
                 ),
           ),
@@ -312,7 +328,8 @@ class _AllDropdownState<T> extends State<AllDropdown<T>> {
     final defaultDecoration = InputDecoration(
       hintText: widget.hintText,
       border: const OutlineInputBorder(),
-      suffixIcon: widget.suffixIcon ??
+      suffixIcon:
+          widget.suffixIcon ??
           Icon(
             _overlayEntry != null ? Icons.arrow_drop_up : Icons.arrow_drop_down,
           ),
@@ -343,4 +360,3 @@ class _AllDropdownState<T> extends State<AllDropdown<T>> {
     );
   }
 }
-

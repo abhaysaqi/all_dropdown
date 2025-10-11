@@ -59,9 +59,18 @@ class AllDropdownChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final defaultBackgroundColor = backgroundColor ?? theme.chipTheme.backgroundColor ?? theme.colorScheme.primary.withOpacity(0.12);
-    final defaultLabelColor = labelColor ?? theme.chipTheme.labelStyle?.color ?? theme.colorScheme.onSurface;
-    final defaultDeleteIconColor = deleteIconColor ?? theme.chipTheme.deleteIconColor ?? theme.colorScheme.onSurface.withOpacity(0.6);
+    final defaultBackgroundColor =
+        backgroundColor ??
+        theme.chipTheme.backgroundColor ??
+        theme.colorScheme.primary.withValues(alpha: 0.12);
+    final defaultLabelColor =
+        labelColor ??
+        theme.chipTheme.labelStyle?.color ??
+        theme.colorScheme.onSurface;
+    final defaultDeleteIconColor =
+        deleteIconColor ??
+        theme.chipTheme.deleteIconColor ??
+        theme.colorScheme.onSurface.withValues(alpha: 0.6);
 
     return Chip(
       label: Text(
@@ -71,9 +80,12 @@ class AllDropdownChip extends StatelessWidget {
         ),
       ),
       onDeleted: onDeleted,
-      deleteIcon: deleteIcon ?? Icon(Icons.close, size: 18, color: defaultDeleteIconColor),
+      deleteIcon:
+          deleteIcon ??
+          Icon(Icons.close, size: 18, color: defaultDeleteIconColor),
       backgroundColor: defaultBackgroundColor,
-      padding: padding ?? const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding:
+          padding ?? const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       avatar: avatar,
       shape: shape,
       elevation: elevation,
@@ -82,4 +94,3 @@ class AllDropdownChip extends StatelessWidget {
     );
   }
 }
-

@@ -276,7 +276,7 @@ class _AllTypeaheadState<T> extends State<AllTypeahead<T>> {
                     borderRadius: widget.suggestionsBorderRadius ?? BorderRadius.circular(8),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 10,
                         offset: const Offset(0, 5),
                       ),
@@ -323,7 +323,7 @@ class _AllTypeaheadState<T> extends State<AllTypeahead<T>> {
               child: Text(
                 'No suggestions found',
                 style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
+                  color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
                 ),
               ),
             ),
@@ -343,7 +343,7 @@ class _AllTypeaheadState<T> extends State<AllTypeahead<T>> {
           child: Container(
             padding: widget.itemPadding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             color: isSelected
-                ? (widget.selectedItemColor ?? Theme.of(context).primaryColor.withOpacity(0.1))
+                ? (widget.selectedItemColor ?? Theme.of(context).primaryColor.withValues(alpha: 0.1))
                 : null,
             child: Row(
               children: [
