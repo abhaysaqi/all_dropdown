@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// A customizable chip widget for displaying selected items in dropdowns.
-///
 /// Used primarily by [AllMultiDropdown] to show selected items with a remove button.
 class AllDropdownChip extends StatelessWidget {
   /// The text to display on the chip
