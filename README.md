@@ -1,10 +1,30 @@
 # 🌟 All Dropdown — The Ultimate Flutter Dropdown Package
 
+<p align="left">
+  <a href="https://pub.dev/packages/all_dropdown"><img src="https://img.shields.io/pub/v/all_dropdown.svg?label=pub.dev&color=blue" alt="pub version"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-success.svg" alt="license"></a>
+  <img src="https://img.shields.io/badge/flutter-%E2%89%A51.17-blue" alt="flutter min">
+  <img src="https://img.shields.io/badge/dart-%5E3.9.2-blue" alt="dart sdk">
+</p>
+
 ## 🧩 Overview
 
 **All Dropdowns** is a powerful, fully customizable Flutter package that brings together all types of dropdown functionality in one place — single select, multi-select, searchable dropdowns, chip-based selections, and typeahead/autocomplete.
 
 It's designed to look and feel like Flutter's native widgets (DropdownButton, Autocomplete, TextField) while offering extended capabilities and maximum flexibility — making it the **one-stop solution for all dropdown needs**.
+
+## 🗺️ Table of Contents
+
+- [Screenshots](#-screenshots)
+- [Features](#-features)
+- [Core Widgets](#-core-widgets)
+- [Installation](#-installation)
+- [Quick Start](#-quick-start)
+- [Usage Examples](#-usage-examples)
+- [Customization Options](#-customization-options)
+- [Compatibility](#-compatibility)
+- [Contributing](#-contributing)
+- [License](#-license)
 
 ## 🖼️ Screenshots
 
@@ -73,6 +93,30 @@ Then run:
 
 ```bash
 flutter pub get
+```
+
+## ⚡ Quick Start
+
+Add an `AllDropdown` to your widget tree:
+
+```dart
+import 'package:all_dropdown/all_dropdown.dart';
+
+class Demo extends StatelessWidget {
+  const Demo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AllDropdown<String>(
+      items: const ['Apple', 'Banana', 'Orange'],
+      hintText: 'Select Fruit',
+      enableSearch: true,
+      onChanged: (value) {
+        // handle selection
+      },
+    );
+  }
+}
 ```
 
 ## 🧠 Usage Examples
@@ -231,6 +275,13 @@ Inherits most properties from `AllDropdown`, plus:
 | `autoSelectOnSubmit` | `bool` | Auto-select first suggestion on submit (default: false) |
 | `loadingBuilder` | `Widget?` | Widget shown while loading |
 
+## 🧩 Compatibility
+
+- **Flutter**: >= 1.17.0  
+- **Dart SDK**: ^3.9.2
+
+These constraints are taken from the package `environment` in `pubspec.yaml`.
+
 ## 🧩 Why Choose All Dropdowns?
 
 ✅ **Combines all dropdown types in one package**  
@@ -257,9 +308,20 @@ Inherits most properties from `AllDropdown`, plus:
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+### Development Tips
+- Run static analysis: `flutter analyze`
+- Run tests: `flutter test`
+- Format code: `dart format .`
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🔗 Links
+
+- Pub: https://pub.dev/packages/all_dropdown  
+- Repository: https://github.com/yourusername/all_dropdown  
+- Issues: https://github.com/yourusername/all_dropdown/issues
 
 ## 👨‍💻 Author
 
