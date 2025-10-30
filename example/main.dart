@@ -206,6 +206,138 @@ class _AllDropdownDemoState extends State<AllDropdownDemo> {
 
             const SizedBox(height: 24),
 
+            // Advanced Single Dropdown (custom items, width, maxHeight)
+            _buildSection(
+              title: '🧩 Advanced Single Dropdown',
+              description:
+                  'Custom itemBuilder, fixed dropdown width, and constrained height',
+              child: AllDropdown<String>(
+                items: users,
+                hintText: 'Select a user',
+                enableSearch: true,
+                searchHintText: 'Search users...'
+                    ,
+                maxHeight: 220,
+                dropdownWidth: 360,
+                selectedItemColor: Colors.indigo.withValues(alpha: 0.08),
+                itemTextColor: Colors.indigo.shade900,
+                itemBuilder: (context, item) {
+                  final initials = item.split(' ').map((e) => e[0]).take(2).join();
+                  return Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 14,
+                        backgroundColor: Colors.indigo.shade100,
+                        child: Text(
+                          initials,
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(child: Text(item)),
+                    ],
+                  );
+                },
+                onChanged: (value) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Selected user: $value')),
+                  );
+                },
+                decoration: const InputDecoration(
+                  labelText: 'Advanced',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.person_outline),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // Disabled Dropdown example
+            _buildSection(
+              title: '⛔ Disabled Dropdown',
+              description: 'Demonstrates disabled state styling and behavior',
+              child: const AllDropdown<String>(
+                items: ['One', 'Two', 'Three'],
+                hintText: 'Disabled control',
+                enabled: false,
+                decoration: InputDecoration(
+                  labelText: 'Disabled',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.block),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // Multi Select with custom chip builder and maxChipsDisplay
+            _buildSection(
+              title: '🏷️ Multi Select with Custom Chips',
+              description: 'Custom chipBuilder and +N more summary with maxChipsDisplay',
+              child: AllMultiDropdown<String>(
+                items: frameworks,
+                values: selectedFrameworks,
+                hintText: 'Pick multiple frameworks',
+                enableSearch: true,
+                maxChipsDisplay: 2,
+                chipBuilder: (context, item, onRemove) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 4),
+                    child: Chip(
+                      label: Text(item),
+                      avatar: const Icon(Icons.code, size: 16),
+                      deleteIcon: const Icon(Icons.close, size: 16),
+                      onDeleted: onRemove,
+                      backgroundColor: Colors.teal.shade50,
+                      labelStyle: TextStyle(color: Colors.teal.shade900),
+                    ),
+                  );
+                },
+                onChanged: (selected) {
+                  setState(() {
+                    selectedFrameworks = selected;
+                  });
+                },
+                decoration: const InputDecoration(
+                  labelText: 'Custom Chips',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.tag),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // Typeahead advanced (multiSelect, show on focus, up direction)
+            _buildSection(
+              title: '🔝 Typeahead Advanced',
+              description:
+                  'Multi-select, suggestions on focus, upward overlay, and clear after selection',
+              child: AllTypeahead<String>(
+                hintText: 'Type to search or focus to open',
+                suggestionsCallback: (pattern) async {
+                  await Future.delayed(const Duration(milliseconds: 200));
+                  final pool = users;
+                  return pool
+                      .where((u) => u.toLowerCase().contains(pattern.toLowerCase()))
+                      .toList();
+                },
+                multiSelect: true,
+                showSuggestionsOnFocus: true,
+                suggestionsDirection: AxisDirection.up,
+                clearAfterSelection: true,
+                debounceDuration: const Duration(milliseconds: 0),
+                onMultipleSelected: (values) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Selected: ${values.join(', ')}')),
+                  );
+                },
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
             // Results Display
             Card(
               child: Padding(
