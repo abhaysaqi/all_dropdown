@@ -6,6 +6,16 @@
 
 It's designed to look and feel like Flutter's native widgets (DropdownButton, Autocomplete, TextField) while offering extended capabilities and maximum flexibility — making it the **one-stop solution for all dropdown needs**.
 
+## 🖼️ Screenshots
+
+> Replace these placeholder URLs with your real screenshots or GIFs (recommended size ~800×500). You can host them on your repo (e.g., `assets/screenshots/...`) and use raw GitHub links.
+
+![Single Select Dropdown](https://via.placeholder.com/800x500?text=AllDropdown+%E2%80%94+Single+Select)
+
+![Multi Select with Chips](https://via.placeholder.com/800x500?text=AllMultiDropdown+%E2%80%94+Multi+Select+with+Chips)
+
+![Typeahead / Autocomplete](https://via.placeholder.com/800x500?text=AllTypeahead+%E2%80%94+Autocomplete)
+
 ## 🚀 Features
 
 ### 🎯 Single Select Dropdown
