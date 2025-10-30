@@ -7,7 +7,6 @@ void main() {
   group('AllDropdown', () {
     testWidgets('renders with items', (WidgetTester tester) async {
       final items = ['Apple', 'Banana', 'Orange'];
-      String? selectedValue;
 
       await tester.pumpWidget(
         MaterialApp(
@@ -15,9 +14,7 @@ void main() {
             body: AllDropdown<String>(
               items: items,
               hintText: 'Select Fruit',
-              onChanged: (value) {
-                selectedValue = value;
-              },
+              onChanged: (_) {},
             ),
           ),
         ),
@@ -84,7 +81,6 @@ void main() {
   group('AllMultiDropdown', () {
     testWidgets('renders with items', (WidgetTester tester) async {
       final items = ['Flutter', 'React', 'Vue'];
-      List<String> selectedValues = [];
 
       await tester.pumpWidget(
         MaterialApp(
@@ -92,9 +88,7 @@ void main() {
             body: AllMultiDropdown<String>(
               items: items,
               hintText: 'Select Frameworks',
-              onChanged: (values) {
-                selectedValues = values;
-              },
+              onChanged: (_) {},
             ),
           ),
         ),
