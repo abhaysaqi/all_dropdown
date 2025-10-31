@@ -258,37 +258,54 @@ class _AllTypeaheadState<T> extends State<AllTypeahead<T>> {
     final isUp = widget.suggestionsDirection == AxisDirection.up;
     
     _overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        width: widget.suggestionsWidth ?? size.width,
-        child: CompositedTransformFollower(
-          link: _layerLink,
-          showWhenUnlinked: false,
-          offset: isUp ? Offset(0, -5) : Offset(0, size.height + 5),
-          targetAnchor: isUp ? Alignment.topLeft : Alignment.bottomLeft,
-          followerAnchor: isUp ? Alignment.bottomLeft : Alignment.topLeft,
-          child: Material(
-            elevation: 8,
-            borderRadius: widget.suggestionsBorderRadius ?? BorderRadius.circular(8),
-            child: Container(
-              decoration: widget.suggestionsDecoration ??
-                  BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: widget.suggestionsBorderRadius ?? BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-              constraints: BoxConstraints(
-                maxHeight: widget.maxHeight ?? 250,
-              ),
-              child: _buildSuggestionsList(),
+      builder: (context) => Stack(
+        children: [
+          // Full screen tap detector to close overlay
+          Positioned.fill(
+            child: GestureDetector(
+              onTap: _removeOverlay,
+              child: Container(color: Colors.transparent),
             ),
           ),
-        ),
+          // Suggestions content
+          Positioned(
+            width: widget.suggestionsWidth ?? size.width,
+            child: CompositedTransformFollower(
+              link: _layerLink,
+              showWhenUnlinked: false,
+              offset: isUp ? Offset(0, -5) : Offset(0, size.height + 5),
+              targetAnchor: isUp ? Alignment.topLeft : Alignment.bottomLeft,
+              followerAnchor: isUp ? Alignment.bottomLeft : Alignment.topLeft,
+              child: GestureDetector(
+                onTap: () {
+                  // Prevent closing when tapping inside suggestions
+                },
+                child: Material(
+                  elevation: 8,
+                  borderRadius: widget.suggestionsBorderRadius ?? BorderRadius.circular(8),
+                  child: Container(
+                    decoration: widget.suggestionsDecoration ??
+                        BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius: widget.suggestionsBorderRadius ?? BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.1),
+                              blurRadius: 10,
+                              offset: const Offset(0, 5),
+                            ),
+                          ],
+                        ),
+                    constraints: BoxConstraints(
+                      maxHeight: widget.maxHeight ?? 250,
+                    ),
+                    child: _buildSuggestionsList(),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
 
@@ -414,26 +431,33 @@ class _AllTypeaheadState<T> extends State<AllTypeahead<T>> {
     final defaultDecoration = InputDecoration(
       hintText: widget.hintText,
       border: const OutlineInputBorder(),
-      suffixIcon: _controller.text.isNotEmpty
-          ? IconButton(
-              icon: const Icon(Icons.clear, size: 20),
-              onPressed: () {
-                _controller.clear();
-                _removeOverlay();
-              },
-            )
-          : null,
     );
 
     return CompositedTransformTarget(
       link: _layerLink,
-      child: TextField(
-        controller: _controller,
-        focusNode: _focusNode,
-        decoration: widget.decoration ?? defaultDecoration,
-        enabled: widget.enabled,
-        textInputAction: widget.textInputAction ?? TextInputAction.search,
-        onSubmitted: _onSubmit,
+      child: ValueListenableBuilder<TextEditingValue>(
+        valueListenable: _controller,
+        builder: (context, value, child) {
+          final decoration = widget.decoration ?? defaultDecoration;
+          return TextField(
+            controller: _controller,
+            focusNode: _focusNode,
+            decoration: decoration.copyWith(
+              suffixIcon: value.text.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.clear, size: 20),
+                      onPressed: () {
+                        _controller.clear();
+                        _removeOverlay();
+                      },
+                    )
+                  : decoration.suffixIcon,
+            ),
+            enabled: widget.enabled,
+            textInputAction: widget.textInputAction ?? TextInputAction.search,
+            onSubmitted: _onSubmit,
+          );
+        },
       ),
     );
   }

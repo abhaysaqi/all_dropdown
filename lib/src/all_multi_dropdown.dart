@@ -201,46 +201,63 @@ class _AllMultiDropdownState<T> extends State<AllMultiDropdown<T>> {
     final size = renderBox.size;
 
     _overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        width: widget.dropdownWidth ?? size.width,
-        child: CompositedTransformFollower(
-          link: _layerLink,
-          showWhenUnlinked: false,
-          offset: Offset(0, size.height + 5),
-          child: Material(
-            elevation: 8,
-            borderRadius:
-                widget.dropdownBorderRadius ?? BorderRadius.circular(8),
-            child: Container(
-              decoration:
-                  widget.dropdownDecoration ??
-                  BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius:
-                        widget.dropdownBorderRadius ?? BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
+      builder: (context) => Stack(
+        children: [
+          // Full screen tap detector to close overlay
+          Positioned.fill(
+            child: GestureDetector(
+              onTap: _removeOverlay,
+              child: Container(color: Colors.transparent),
+            ),
+          ),
+          // Dropdown content
+          Positioned(
+            width: widget.dropdownWidth ?? size.width,
+            child: CompositedTransformFollower(
+              link: _layerLink,
+              showWhenUnlinked: false,
+              offset: Offset(0, size.height + 5),
+              child: GestureDetector(
+                onTap: () {
+                  // Prevent closing when tapping inside dropdown
+                },
+                child: Material(
+                  elevation: 8,
+                  borderRadius:
+                      widget.dropdownBorderRadius ?? BorderRadius.circular(8),
+                  child: Container(
+                    decoration:
+                        widget.dropdownDecoration ??
+                        BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius:
+                              widget.dropdownBorderRadius ?? BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.1),
+                              blurRadius: 10,
+                              offset: const Offset(0, 5),
+                            ),
+                          ],
+                        ),
+                    constraints: BoxConstraints(maxHeight: widget.maxHeight ?? 300),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (widget.enableSearch) _buildSearchField(),
+                        Flexible(
+                          child: _filteredItems.isEmpty
+                              ? _buildEmptyWidget()
+                              : _buildItemsList(),
+                        ),
+                      ],
+                    ),
                   ),
-              constraints: BoxConstraints(maxHeight: widget.maxHeight ?? 300),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (widget.enableSearch) _buildSearchField(),
-                  Flexible(
-                    child: _filteredItems.isEmpty
-                        ? _buildEmptyWidget()
-                        : _buildItemsList(),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
 
@@ -267,15 +284,20 @@ class _AllMultiDropdownState<T> extends State<AllMultiDropdown<T>> {
         decoration: InputDecoration(
           hintText: widget.searchHintText ?? 'Search...',
           prefixIcon: const Icon(Icons.search, size: 20),
-          suffixIcon: _searchController.text.isNotEmpty
-              ? IconButton(
-                  icon: const Icon(Icons.clear, size: 20),
-                  onPressed: () {
-                    _searchController.clear();
-                    _filterItems('');
-                  },
-                )
-              : null,
+          suffixIcon: ValueListenableBuilder<TextEditingValue>(
+            valueListenable: _searchController,
+            builder: (context, value, child) {
+              return value.text.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.clear, size: 20),
+                      onPressed: () {
+                        _searchController.clear();
+                        _filterItems('');
+                      },
+                    )
+                  : const SizedBox.shrink();
+            },
+          ),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 12,
@@ -397,10 +419,12 @@ class _AllMultiDropdownState<T> extends State<AllMultiDropdown<T>> {
 
   Widget _buildChipsContainer() {
     if (_selectedItems.isEmpty) {
-      return Text(
-        widget.hintText ?? '',
-        style: Theme.of(context).inputDecorationTheme.hintStyle,
-      );
+      return widget.hintText != null
+          ? Text(
+              widget.hintText!,
+              style: Theme.of(context).inputDecorationTheme.hintStyle,
+            )
+          : const SizedBox.shrink();
     }
 
     final displayItems =
